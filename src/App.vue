@@ -1,15 +1,17 @@
 <template>
   <div id="app">
-    <Chess></Chess>
+    <Board></Board>
   </div>
 </template>
 
 <script>
+import Board from './components/Board.vue';
 import Chess from './components/Chess.vue';
 export default {
   name: 'App',
   components: {
-    Chess
+    Chess,
+    Board
   }
 }
 </script>
