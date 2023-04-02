@@ -1,20 +1,43 @@
 <template>
         <div class="chessBoard">
-        <div v-for="n in 64" v-bind:key="((8-Math.floor((n-1)/8)) + 10 * ((n-1)%8 + 1))" :class="{buttonWhite: (8-Math.floor((n-1)/8)+ ((n-1)%8 + 1) ) % 2 == 0, buttonBlack: (8-Math.floor((n-1)/8)+ ((n-1)%8 + 1) ) % 2 == 1}"   @click="printId(((8-Math.floor((n-1)/8)) + 10 * ((n-1)%8 + 1)))"></div>
+        <div v-for="n in 64" v-bind:key="((8-Math.floor((n-1)/8)) + 10 * ((n-1)%8 + 1))" :class="{buttonWhite: (8-Math.floor((n-1)/8)+ ((n-1)%8 + 1) ) % 2 == 0, buttonBlack: (8-Math.floor((n-1)/8)+ ((n-1)%8 + 1) ) % 2 == 1}"   @click="move(((8-Math.floor((n-1)/8)) + 10 * ((n-1)%8 + 1)))"></div>
         </div>
 </template>
 
 <script>
+    import ChessService from '../services/ChessService'
     const boardsize = 100; 
     export default{
+        name: '',
         data(){
-            return {
+            return {    
+            isWhite: true,
+            castle:[true,true,true,true],
+            enPassant: null,
+            lastClicked: [0,0]
             }
+        },
+        props:{
+            position:"",
         },
         methods:{
             printId(key){
                 console.log(key)
+            },
+            move(move){
+                ChessService.putMove(move).then((response) =>{
+                    if(response.status == 200){
+                        console.log(response);
+                        if(response.data == 1){
+                            console.log("do later");
+                        }
+                    }
+                    else{
+                        console.log(response);
+                    }
+                })
             }
+
         }
     }
 </script>
