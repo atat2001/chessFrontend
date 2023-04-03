@@ -1,6 +1,8 @@
 <template>
+
+   
     <div>
-        <h1>{{ position }}</h1>
+        <Board :position="position"></Board>
 
     </div>
 </template>
@@ -11,7 +13,7 @@
     export default{
         name: '',
         data(){
-            return { position: '',
+            return { position: "",
         }
         },
         components:{
@@ -21,7 +23,7 @@
             getPosition(){
                 ChessService.getPosition().then((response) =>{
                     if(response.status == 200){
-                    this.position = response.data;
+                    this.position = response.data.position;
                 }
                 })
             }
