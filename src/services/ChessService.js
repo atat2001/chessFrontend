@@ -6,7 +6,7 @@ class ChessService{
 
     }
     putMove(move){
-        return http.post("/move", {
+        return http.put("/move", {
             move:move,
             headers: {
             'Access-Control-Allow-Origin': 'http://localhost:8080'
