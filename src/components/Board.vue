@@ -1,7 +1,10 @@
 <template>
         <div class="chessBoard">
-            <div v-for="n in 64" v-bind:key="getKey(n)" :class="{buttonWhite: (getStyle(n)) == 1, buttonBlack: (getStyle(n)) == 0}" style="display:flex; justify-content:center; align-items:center"   @click="move(getKey(n))">
-            
+            <div v-for="n in 64" v-bind:key="getKey(n)" :class="{
+                    buttonBlack: (getStyle(n)) == 0, buttonWhite:(getStyle(n)) == 1,
+                    buttonBlackHighlighted: (getStyle(n)) == 2, buttonWhiteHighlighted: (getStyle(n)) == 3,
+                    buttonBlackPossible: (getStyle(n)) == 4, buttonWhitePossible: (getStyle(n)) == 5
+                }" style="display:flex; justify-content:center; align-items:center"   @click="move(getKey(n))">
             <Piece :id="getKey(n)" :type="positionList[n-1]" :index="n"></Piece>
             </div>
         </div>
@@ -39,7 +42,9 @@
                 isWhite: true,
                 castle:[true,true,true,true],
                 enPassant: null,
-                lastClicked: [0,0]
+                highlight: 0,
+                possibleMoves: []
+
             }
         },
         props:{
@@ -55,12 +60,17 @@
             move(move){
                 ChessService.putMove(move).then((response) =>{
                     if(response.status == 200){
-                        if(response.data == 1){
+                        if(response.data != null){
                             this.$parent.getPosition();
+                            if(response.data.possibleMoves != null){
+                                this.possibleMoves = response.data.possibleMoves;
+                                this.highlight = response.data.selected;
+                            }
+                            else{
+                                this.possibleMoves = [];
+                                this.highlight = 0;
+                            }
                         }
-                    }
-                    else{
-                        console.log(response);
                     }
                 })
             },
@@ -68,7 +78,15 @@
                 return ((8-Math.floor((n-1)/8)) + 10 * ((n-1)%8 + 1));
             },
             getStyle(n){
-                return (this.getKey(n) % 10 + (this.getKey(n)-this.getKey(n) % 10) / 10)%2;
+                const key = this.getKey(n);
+                var white = (this.getKey(n) % 10 + (this.getKey(n)-this.getKey(n) % 10) / 10)%2;
+                if(this.highlight != undefined && key == this.highlight){
+                    white += 2;
+                }
+                if(this.possibleMoves.includes(key)){
+                    white += 4;
+                }
+                return white;
             }
         },
         computed:{
@@ -166,6 +184,34 @@
 .buttonBlack {
     border: 1px outset gray;
     background-color: rgb(41, 41, 87);
+    width: min(12.5vh, 12.5vw);
+    height: min(12.5vh, 12.5vw);
+    cursor:pointer;
+}
+.buttonWhiteHighlight {
+    border: 1px outset gray;
+    background-color: rgb(163, 163, 163);
+    width: min(12.5vh, 12.5vw);
+    height: min(12.5vh, 12.5vw);
+    cursor:pointer;
+}
+.buttonBlackHighlight {
+    border: 1px outset gray;
+    background-color: rgb(87, 87, 194);
+    width: min(12.5vh, 12.5vw);
+    height: min(12.5vh, 12.5vw);
+    cursor:pointer;
+}
+.buttonWhitePossible {
+    border: 1px outset gray;
+    background-color: rgba(255, 255, 255, 0.815);
+    width: min(12.5vh, 12.5vw);
+    height: min(12.5vh, 12.5vw);
+    cursor:pointer;
+}
+.buttonBlackPossible {
+    border: 1px outset gray;
+    background-color: rgba(41, 41, 87, 0.76);
     width: min(12.5vh, 12.5vw);
     height: min(12.5vh, 12.5vw);
     cursor:pointer;
