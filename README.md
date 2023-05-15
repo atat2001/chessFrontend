@@ -1,4 +1,6 @@
 # chess
+#video of it working
+https://www.youtube.com/watch?v=YxSiRhDNQz4&ab_channel=Ant%C3%B3nioToste
 
 ## Project setup
 ```
