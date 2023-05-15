@@ -56,7 +56,6 @@
                 this.type = 17;
             },
             promotedPiece(nr){
-                console.log(this.$parent);
                 this.$parent.setPromotedPiece(nr);
             }
         },  

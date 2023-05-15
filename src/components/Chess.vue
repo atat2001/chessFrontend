@@ -1,6 +1,6 @@
 <template>
     <div v-if="this.checkmate">
-        <Board :position="position" :checkmateWhite="checkmateWhite" :checkmateBlack="checkmateBlack" :highlight="highlight" :possibleMoves="possibleMoves"></Board>
+        <Board :ref="'board'" :position="position" :checkmateWhite="checkmateWhite" :checkmateBlack="checkmateBlack" :highlight="highlight" :possibleMoves="possibleMoves"></Board>
     </div>
     <button @click="undo(1)">undo</button>
     <input v-model.number="id" @click="loadGame(id)"/>
@@ -83,6 +83,7 @@
                                 this.checkmateWhite = response.data.checkmateWhite;
                                 this.possibleMoves = [];
                                 this.highlight = 0;
+                                this.$refs['board'].promotion = -1;
                             }
                         }
                     }

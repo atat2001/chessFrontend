@@ -77,19 +77,14 @@
                     // var promotion = await this.ref['piece' + this.move].getPromotion();
                 }*/
                 if(typeof this.highlight !== 'undefined'){
-                    console.log(this.$refs)
                     if(this.highlight != null && [9,11,1].includes(Math.abs(move-this.highlight)) && (move%10)%7 == 1){
-                        console.log("type:")
-                        console.log('piece' + move);
-                        console.log((this.$refs['piece' + this.highlight])[0]);
-                        if((this.$refs['piece' + this.highlight])[0].type%10 == 1){
+                        if(typeof (this.$refs['piece' + this.highlight]) !== 'undefined' && (this.$refs['piece' + this.highlight])[0].type%10 == 1){
                             this.promotedPiece = -1;
                             this.promotion = (this.$refs['piece' + move])[0].index - 1;
                             // added unwatch
-                            const unwatch = this.$watch('promotedPiece', (newVal, oldVal) => {this.$parent.move(move, newVal);unwatch();this.promotion = -1;});
+                            const unwatch = this.$watch('promotedPiece', (newVal, oldVal) => {this.$parent.move(move, newVal);unwatch();});
                             this.trigger++;
-                            console.log(this.positionList);
-                            
+
                         }
                         else{
                         this.$parent.move(move, 3);}
@@ -124,7 +119,6 @@
         computed:{
             positionList: {
                 get(){
-                    console.log(this.trigger);
                     if(this.position == ""){
                         return [];
                     }
